@@ -1,0 +1,900 @@
+import React, { forwardRef, Component } from 'react';
+import Header from '../../../Components/System/Header';
+import {
+  DataFilter,
+  DataFilterGroup,
+  Container,
+  SubContainer,
+  LineTopFilter,
+  SubContainerTitle,
+  Linha,
+  DivDetalhe,
+} from './style';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import ptBR from 'date-fns/locale/pt-BR';
+import moment from 'moment';
+import api from '../../../services/api';
+import { getFromStorage } from '../../../services/auth';
+import { alerta } from '../../../services/funcoes';
+import { KpiIndicators } from '../../../Components/ResultsAnalysis/KpiDashboard/Indicators';
+import { ChartSalesByDate } from '../../../Components/ResultsAnalysis/KpiDashboard/ChartSalesByDate';
+import {
+  Graph,
+  Line,
+  IndicatorsLine,
+} from '../../../Components/ResultsAnalysis/KpiDashboard/Indicators/style';
+import Skeleton from 'react-loading-skeleton';
+import { ComponentsHomeContext } from '../../../providers/componentsHome';
+
+import {
+  Icon,
+  Chip,
+  Collapsible,
+  CollapsibleItem,
+  Button,
+} from 'react-materialize';
+import M from 'materialize-css';
+import ProductDashboard from '../../../Components/ResultsAnalysis/KpiDashboard/ProductsData';
+import RoutesDashboard from '../../../Components/ResultsAnalysis/KpiDashboard/RoutesData';
+
+const CustomCalendarInput = forwardRef(({ value, onClick }, ref) => (
+  <div style={{ cursor: 'pointer', marginLeft: '10px' }} onClick={onClick}>
+    <button
+      style={{
+        backgroundColor: 'transparent',
+        border: '0px',
+        fontWeight: '700',
+      }}
+    >
+      {value}
+    </button>
+    <div
+      style={{
+        cursor: 'pointer',
+        display: 'inline-block',
+        marginLeft: '8px',
+        width: '0',
+        height: '0',
+        borderTop: '6px solid transparent',
+        borderBottom: '6px solid transparent',
+        borderLeft: '6px solid rgb(189, 32, 123)',
+      }}
+    ></div>
+  </div>
+));
+
+export default class KpiDashboard extends Component {
+  static contextType = ComponentsHomeContext
+  state = {
+    daySelected: new Date(),
+    monthSelected: new Date(),
+    dataFilterGroupPrior: -1,
+    dataFilterGroup: 1,
+    customSelectedInitial: 0,
+    customSelectedEnd: 0,
+    directIndicators: [],
+    loading: true,
+    vendedoresSelecionados: [],
+    ramoAtividadeSelecionados: [],
+    selectedFilter: 'day',
+    changedFilter: 0,
+  };
+
+  componentDidMount = async () => {
+    await this.carregarVariaveisEstado();
+    let { daySelected } = this.state;
+    this.initCustomDates();
+    await this.loadFiltersList();
+    await this.loadEstruturaAutorizada();
+    await this.handleLoadDayData(daySelected, true);
+  };
+
+  loadEstruturaAutorizada = async () => {
+    const { setActiveActivity } = this.context
+    setActiveActivity(true)
+    try {
+      const { empresaAtiva, usuarioAtivo } = this.state;
+      const url =
+        '/v1/dashboard/estruturaautorizada/' +
+        empresaAtiva +
+        '/' +
+        usuarioAtivo;
+      const retorno = await api.get(url);
+
+      if (!retorno) {
+        return [];
+      } else {
+        if (retorno.data && retorno.data.sucess) {
+          let estruturaAutorizada = retorno.data.data;
+          
+          this.setState({
+            estruturaAutorizada,
+          });
+        } else {
+          return [];
+        }
+      }
+    } catch (err) {      
+      this.setState({ loading: false });
+      alerta(`Erro ao carregar os filtros => ` + err);
+    } finally {
+      setActiveActivity(false)
+    }
+  };
+
+  carregarVariaveisEstado = async (e) => {
+    const sessao = getFromStorage();
+    this.setState({
+      empresaAtiva: sessao.empresaId,
+      usuarioAtivo: sessao.codigoUsuario,
+      empresaCfId: sessao.empresaCfId,
+    });
+  };
+
+  initCustomDates = () => {
+    const endOfWeek = moment();
+    const startOfWeek = moment().subtract(14, 'days');
+    let customSelectedInitial = startOfWeek.toDate();
+    let customSelectedEnd = endOfWeek.toDate();
+    this.setState({ customSelectedInitial, customSelectedEnd });
+  };
+
+  handleClickFilterGroupDay = async () => {
+    let { dataFilterGroupPrior, dataFilterGroup, daySelected } = this.state;
+    dataFilterGroupPrior = dataFilterGroup;
+    await this.handleLoadDayData(daySelected);
+    this.setState({
+      dataFilterGroupPrior,
+      dataFilterGroup: 1,
+      selectedFilter: 'day',
+    });
+    this.onChangeFilter();
+  };
+
+  handleClickFilterGroupMonth = () => {
+    let { dataFilterGroupPrior, dataFilterGroup, monthSelected } = this.state;
+    dataFilterGroupPrior = dataFilterGroup;
+    this.setState({
+      dataFilterGroupPrior,
+      dataFilterGroup: 2,
+      selectedFilter: 'month',
+    });
+    this.handleLoadMonthData(monthSelected);
+  };
+
+  handleClickFilterGroupCustom = () => {
+    let {
+      dataFilterGroupPrior,
+      dataFilterGroup,
+      customSelectedInitial,
+    } = this.state;
+    dataFilterGroupPrior = dataFilterGroup;
+    this.setState({
+      dataFilterGroupPrior,
+      dataFilterGroup: 3,
+      selectedFilter: 'custom',
+    });
+    this.handleLoadCustomDataInitial(customSelectedInitial);
+    // this.onChangeFilter();
+  };
+
+  getEstruturaAutorizada = () => {
+    let inElements = '';
+    let { estruturaAutorizada } = this.state;
+
+    if (estruturaAutorizada !== undefined) {
+      for (const element of estruturaAutorizada) {
+        inElements += "'" + element['ESTR_ID'] + "',";
+      }
+
+      if (inElements !== '') {
+        return inElements.substr(0, inElements.length - 1);
+      }
+    }
+    return inElements;
+  };
+
+  loadIndicatorsGeoOf = async (startDate, finalDate, tipo) => {
+    try {
+      // return;
+      const { empresaAtiva, usuarioAtivo } = this.state;
+      let vendedores, ramosAtividades, cidades, supervisores;
+      vendedores = this.getSelectedVendedores();
+      ramosAtividades = this.getSelectedRamosAtividades();
+      cidades = this.getSelectedCidades();
+      supervisores = this.getSelectedSupervisores();
+
+
+      const url =
+        '/v1/dashboard/saibgeodirectdata/' + empresaAtiva + '/' + usuarioAtivo;
+      let datas = {
+        startDate,
+        finalDate,
+        cidades,
+        ramosAtividades,
+        vendedores,
+        estruturaAutorizada: this.getEstruturaAutorizada(),
+        supervisores,
+        tipo,
+      };
+      const retorno = await api.post(url, datas);
+
+      if (!retorno) {
+        return [];
+      } else {
+        if (retorno.data && retorno.data.sucess) {
+          let result = retorno.data.data;
+          return result;
+        } else {
+          return [];
+        }
+      }
+    } catch (err) {
+      this.setState({ loading: false });
+      alerta(`Erro ao carregar os indicadores => ` + err);
+    }
+  };
+
+  handleLoadDayData = async (daySelected, initialLoaging = false) => {
+    const { setActiveActivity } = this.context
+    setActiveActivity(true)
+    this.setState({ loading: true, selectedFilter: 'day', daySelected });
+    if (!initialLoaging) {
+      this.onChangeFilter();
+    }
+    let directIndicators = await this.loadIndicatorsGeoOf(
+      moment(daySelected).format('DD/MM/yyyy'),
+      moment(daySelected).format('DD/MM/yyyy'),
+      'day'
+    );
+
+    this.setState({ loading: false });
+    this.setState({
+      directIndicators,
+    });
+    setActiveActivity(false)
+  };
+
+  handleLoadMonthData = async (monthSelected) => {
+    this.setState({ loading: true, selectedFilter: 'month', monthSelected });
+
+    setTimeout(() => {
+      this.onChangeFilter();
+    }, 50);
+
+    let startDate = moment(monthSelected).startOf('month').format('DD/MM/YYYY');
+    let endDate = moment(monthSelected).endOf('month').format('DD/MM/YYYY');
+
+    let directIndicators = await this.loadIndicatorsGeoOf(
+      startDate,
+      endDate,
+      'month'
+    );
+
+    this.setState({
+      directIndicators,
+      loading: false,
+    });
+  };
+
+  handleLoadCustomDataEnd = async (customSelectedEnd) => {
+    this.setState({
+      loading: true,
+      selectedFilter: 'custom',
+      customSelectedEnd,
+    });
+    setTimeout(() => {
+      this.onChangeFilter();
+    }, 50);
+    let { customSelectedInitial } = this.state;
+    let directIndicators = await this.loadIndicatorsGeoOf(
+      moment(customSelectedInitial).format('DD/MM/yyyy'),
+      moment(customSelectedEnd).format('DD/MM/yyyy'),
+      'custom'
+    );
+    this.setState({ loading: false });
+    this.setState({
+      directIndicators,
+    });
+  };
+
+  handleLoadCustomDataInitial = async (customSelectedInitial) => {
+    this.setState({
+      loading: true,
+      selectedFilter: 'custom',
+      customSelectedInitial,
+    });
+    setTimeout(() => {
+      this.onChangeFilter();
+    }, 50);
+    let { customSelectedEnd } = this.state;
+    let directIndicators = await this.loadIndicatorsGeoOf(
+      moment(customSelectedInitial).format('DD/MM/yyyy'),
+      moment(customSelectedEnd).format('DD/MM/yyyy'),
+      'custom'
+    );
+    this.setState({ loading: false });
+    this.setState({
+      directIndicators,
+    });
+  };
+
+  loadFiltersList = async () => {
+    const { setActiveActivity } = this.context
+    setActiveActivity(true)
+    try {
+      const { empresaAtiva, usuarioAtivo } = this.state;
+      const url =
+        '/v1/dashboard/allfilter/' + empresaAtiva + '/' + usuarioAtivo;
+      const retorno = await api.get(url);
+
+      if (!retorno) {
+        return [];
+      } else {
+        if (retorno.data && retorno.data.sucess) {
+          let result = retorno.data.data;
+
+          let ramosAtividades = result.ramos;
+          let ramosAtividadesChips = {};
+          let cidades = result.cidades;
+          let cidadesChips = {};
+          let vendedores = result.vendedores;
+          let vendedoresChips = {};
+          let supervisores = result.supervisores;
+          let supervisoresChips = {};
+
+          for (const vendedor of vendedores) {
+            vendedoresChips[vendedor.VENDEDOR] = null;
+          }
+          for (const supervisor of supervisores) {
+            supervisoresChips[supervisor.SUPERVISOR] = null;
+          }
+          for (const cidade of cidades) {
+            cidadesChips[cidade.CIDADE] = null;
+          }
+          for (const ramo of ramosAtividades) {
+            ramosAtividadesChips[ramo.RAMO] = null;
+          }
+
+          this.setState({
+            ramosAtividades,
+            cidades,
+            vendedores,
+            vendedoresChips,
+            cidadesChips,
+            ramosAtividadesChips,
+            supervisores,
+            supervisoresChips,
+          });
+          
+        } else {
+          return [];
+        }
+      }      
+    } catch (err) {
+      this.setState({ loading: false });
+      alerta(`Erro ao carregar os filtros => ` + err);
+    } finally {
+      setActiveActivity(false)
+    }
+  };
+
+  handleAllDataUpdate = async () => {
+    const {
+      selectedFilter,
+      daySelected,
+      customSelectedInitial,
+      monthSelected,
+    } = this.state;
+    
+    if (selectedFilter === 'day') {
+      await this.handleLoadDayData(daySelected);
+    }
+    if (selectedFilter === 'month') {
+      this.handleLoadMonthData(monthSelected);
+    }
+    if (selectedFilter === 'custom') {
+      this.handleLoadCustomDataInitial(customSelectedInitial);
+    }
+    // this.onChangeFilter();
+  };
+
+  handleManipulaVendedores = () => {
+    let dados = M.Chips.getInstance(document.getElementById('vendedoresChip'));
+    let vendedoresSelecionados;
+    if (dados !== undefined) {
+      vendedoresSelecionados = dados.chipsData;
+    } else {
+      vendedoresSelecionados = [];
+    }
+
+    this.setState({ vendedoresSelecionados });
+    setTimeout(() => {
+      this.handleAllDataUpdate();
+    }, 5);
+  };
+
+  handleManipulaCidades = () => {
+    let dados = M.Chips.getInstance(document.getElementById('cidadesChips'));
+
+    let cidadesSelecionadas;
+    if (dados !== undefined) {
+      cidadesSelecionadas = dados.chipsData;
+    } else {
+      cidadesSelecionadas = [];
+    }
+
+    this.setState({ cidadesSelecionadas });
+    setTimeout(() => {
+      this.handleAllDataUpdate();
+    }, 5);
+  };
+
+  handleManipulaSupervisores = () => {
+    let dados = M.Chips.getInstance(
+      document.getElementById('supervisoresChips')
+    );
+
+    let supervisoresSelecionados;
+    if (dados !== undefined) {
+      supervisoresSelecionados = dados.chipsData;
+    } else {
+      supervisoresSelecionados = [];
+    }
+
+    this.setState({ supervisoresSelecionados });
+    setTimeout(() => {
+      this.handleAllDataUpdate();
+    }, 5);
+  };
+
+  handleManipulaRamosAtividades = () => {
+    let dados = M.Chips.getInstance(
+      document.getElementById('ramosAtividadesChip')
+    );
+
+    let ramosAtividadesSelecionados;
+    if (dados !== undefined) {
+      ramosAtividadesSelecionados = dados.chipsData;
+    } else {
+      ramosAtividadesSelecionados = [];
+    }
+
+    this.setState({ ramosAtividadesSelecionados });
+    setTimeout(() => {
+      this.handleAllDataUpdate();
+    }, 50);
+  };
+
+  makeIn = (chipsElement, elements, searchText, searchKey) => {
+    let inElements = '';
+    if (chipsElement === undefined || elements === undefined) {
+      return inElements;
+    }
+    for (const element of chipsElement) {
+      const _element = elements.find(
+        (elemento) => elemento[searchText] === element.tag
+      );
+      if (_element !== undefined) {
+        inElements += "'" + _element[searchKey] + "',";
+      }
+    }
+    if (inElements !== '') {
+      return inElements.substr(0, inElements.length - 1);
+    }
+    return inElements;
+  };
+
+  getSelectedVendedores = () => {
+    let { vendedoresSelecionados, vendedores } = this.state;
+    return this.makeIn(
+      vendedoresSelecionados,
+      vendedores,
+      'VENDEDOR',
+      'VENDEDOR_ID'
+    );
+  };
+
+  getAllVendedores = () => {
+    const { vendedores } = this.state;
+    let vendedoresFiltro = '';
+    for (const vendedor of vendedores) {
+      vendedoresFiltro += "'" + vendedor.VENDEDOR_ID + "',";
+    }
+    return vendedoresFiltro.substr(0, vendedoresFiltro.length - 1);
+  };
+
+  getSelectedRamosAtividades = () => {
+    let { ramosAtividadesSelecionados, ramosAtividades } = this.state;
+    return this.makeIn(
+      ramosAtividadesSelecionados,
+      ramosAtividades,
+      'RAMO',
+      'RAMO_ID'
+    );
+  };
+
+  getSelectedCidades = () => {
+    let { cidadesSelecionadas, cidades } = this.state;
+    return this.makeIn(cidadesSelecionadas, cidades, 'CIDADE', 'CIDADE');
+  };
+
+  getSelectedSupervisores = () => {
+    let { supervisoresSelecionados, supervisores } = this.state;
+    return this.makeIn(
+      supervisoresSelecionados,
+      supervisores,
+      'SUPERVISOR',
+      'COD_SUPERVISOR_ID'
+    );
+  };
+
+  getAllRamosAtividades = () => {
+    const { ramosAtividades } = this.state;
+    let ramosAtividadesFiltro = '';
+    for (const ramo of ramosAtividades) {
+      ramosAtividadesFiltro += "'" + ramo.RAMO_ID + "',";
+    }
+    return ramosAtividadesFiltro.substr(0, ramosAtividadesFiltro.length - 1);
+  };
+
+  getAllCidades = () => {
+    const { cidades } = this.state;
+    let cidadesFiltro = '';
+
+    for (const cidade of cidades) {
+      cidadesFiltro += "'" + cidade.CIDADE + "',";
+    }
+    return cidadesFiltro.substr(0, cidadesFiltro.length - 1);
+  };
+
+  getAllSupervisores = () => {
+    const { supervisores } = this.state;
+    let supervisoresFiltro = '';
+
+    for (const supervisor of supervisores) {
+      supervisoresFiltro += "'" + supervisor.SUPERVISOR + "',";
+    }
+    return supervisoresFiltro.substr(0, supervisoresFiltro.length - 1);
+  };
+
+  onChangeFilter = () => {
+    let { changedFilter } = this.state;
+    changedFilter += 1;
+    this.setState({ changedFilter });
+  };
+
+  render() {
+    const {
+      daySelected,
+      dataFilterGroup,
+      customSelectedEnd,
+      customSelectedInitial,
+      resultado,
+      monthSelected,
+      dataFilterGroupPrior,
+      loading,
+      vendedoresSelecionados,
+      vendedoresChips,
+      supervisoresSelecionados,
+      supervisoresChips,
+      ramosAtividadesSelecionados,
+      ramosAtividadesChips,
+      cidadesSelecionadas,
+      cidadesChips,
+      selectedFilter,
+      ramoAtividadeSelecionados,
+      changedFilter,
+      vendedores,
+      cidades,
+      ramosAtividades,
+      estruturaAutorizada,
+      directIndicators,
+      supervisores,
+      fromHome,
+    } = this.state;
+    return (
+      <>
+        {!fromHome && <Header />}
+        {/* <Header /> */}
+        <Container className="kpiDashboard">
+          <SubContainer className="kpiContainer">
+            <SubContainerTitle>Indicadores comerciais</SubContainerTitle>
+            {resultado !== undefined && <p>{`Resultado => ${resultado}`}</p>}
+            <LineTopFilter
+              selected={dataFilterGroup}
+              priorSelected={dataFilterGroupPrior}
+            >
+              {dataFilterGroup === 1 && (
+                <DataFilter loading={loading ? 1 : 0}>
+                  <DatePicker
+                    selected={daySelected}
+                    onChange={async (date) => await this.handleLoadDayData(date)}
+                    locale={ptBR}
+                    placeholderText="Selecione um dia"
+                    dateFormat="dd/MM/yyyy"
+                    customInput={<CustomCalendarInput />}
+                    todayButton="Hoje"
+                  />
+                  <Icon tiny>autorenew</Icon>
+                </DataFilter>
+              )}
+              {dataFilterGroup === 2 && (
+                <DataFilter loading={loading ? 1 : 0}>
+                  <Icon tiny>autorenew</Icon>
+                  <DatePicker
+                    selected={monthSelected}
+                    onChange={(date) => this.handleLoadMonthData(date)}
+                    locale={ptBR}
+                    placeholderText="Selecione um mês"
+                    dateFormat="MM/yyyy"
+                    showMonthYearPicker
+                    showFullMonthYearPicker
+                    showTwoColumnMonthYearPicker
+                    customInput={<CustomCalendarInput />}
+                  />
+                </DataFilter>
+              )}
+              {dataFilterGroup === 3 && (
+                <DataFilter loading={loading ? 1 : 0}>
+                  <DatePicker
+                    selected={customSelectedInitial}
+                    onChange={(date) => this.handleLoadCustomDataInitial(date)}
+                    locale={ptBR}
+                    placeholderText="Data inicial"
+                    dateFormat="dd/MM/yyyy"
+                    selectsStart
+                    startDate={customSelectedInitial}
+                    endDate={customSelectedEnd}
+                    customInput={<CustomCalendarInput />}
+                  />
+                  <DatePicker
+                    selected={customSelectedEnd}
+                    onChange={(date) => this.handleLoadCustomDataEnd(date)}
+                    selectsEnd
+                    startDate={customSelectedEnd}
+                    endDate={customSelectedEnd}
+                    minDate={customSelectedInitial}
+                    locale={ptBR}
+                    placeholderText="Data final"
+                    dateFormat="dd/MM/yyyy"
+                    customInput={<CustomCalendarInput />}
+                  />
+                  <Icon tiny>autorenew</Icon>
+                </DataFilter>
+              )}
+              <DataFilterGroup
+                selected={dataFilterGroup}
+                priorSelected={dataFilterGroupPrior}
+              >
+                <div
+                  className="dataFilterGroupDay"
+                  onClick={this.handleClickFilterGroupDay}
+                >
+                  Dia
+                  <hr className="dataFilterGroupDayHr" />{' '}
+                </div>
+                <div
+                  className="dataFilterGroupMonth"
+                  onClick={this.handleClickFilterGroupMonth}
+                >
+                  Mensal
+                  <hr className="dataFilterGroupMonthHr" />
+                </div>
+                <div
+                  className="dataFilterGroupCustom"
+                  onClick={this.handleClickFilterGroupCustom}
+                >
+                  Customizado
+                  <hr className="dataFilterGroupCustomHr" />{' '}
+                </div>
+              </DataFilterGroup>
+            </LineTopFilter>
+            <Linha className="filter">
+              <Collapsible
+                accordion={false}
+                style={{
+                  width: '100%',
+                  borderStyle: 'none',
+                  boxShadow: 'none',
+                }}
+              >
+                <CollapsibleItem
+                  expanded={false}
+                  header="Clique para filtrar"
+                  icon={<Icon>filter_list</Icon>}
+                  node="div"
+                >
+                  <Linha style={{ alignItems: 'row', display: 'flex' }}>
+                    <DivDetalhe style={{ flex: 3 }}>
+                      <label>Supervisores</label>
+                      <Chip
+                        id="supervisoresChips"
+                        className="supervisoresChips"
+                        close={false}
+                        closeIcon={<Icon className="close">close</Icon>}
+                        options={{
+                          data:
+                            supervisoresSelecionados !== undefined &&
+                            supervisoresSelecionados,
+                          onChipAdd: this.handleManipulaSupervisores,
+                          onChipDelete: this.handleManipulaSupervisores,
+                          autocompleteOptions: {
+                            data: supervisoresChips,
+                            limit: 5,
+                            minLength: 1,
+                            onAutocomplete: function noRefCheck() { },
+                          },
+                        }}
+                      />
+                    </DivDetalhe>
+                    <DivDetalhe style={{ flex: 3 }}>
+                      <label>Vendedores</label>
+                      <Chip
+                        id="vendedoresChip"
+                        className="vendedoresChip"
+                        close={false}
+                        closeIcon={<Icon className="close">close</Icon>}
+                        options={{
+                          data:
+                            vendedoresSelecionados !== undefined &&
+                            vendedoresSelecionados,
+                          onChipAdd: this.handleManipulaVendedores,
+                          onChipDelete: this.handleManipulaVendedores,
+                          autocompleteOptions: {
+                            data: vendedoresChips,
+                            limit: 5,
+                            minLength: 1,
+                            onAutocomplete: function noRefCheck() { },
+                          },
+                        }}
+                      />
+                    </DivDetalhe>
+                  </Linha>
+                  <Linha>
+                    <DivDetalhe style={{ flex: 3 }}>
+                      <label>Cidades</label>
+                      <Chip
+                        id="cidadesChips"
+                        className="cidadesChips"
+                        close={false}
+                        closeIcon={<Icon className="close">close</Icon>}
+                        options={{
+                          data:
+                            cidadesSelecionadas !== undefined &&
+                            cidadesSelecionadas,
+                          onChipAdd: this.handleManipulaCidades,
+                          onChipDelete: this.handleManipulaCidades,
+                          autocompleteOptions: {
+                            data: cidadesChips,
+                            limit: 5,
+                            minLength: 1,
+                            onAutocomplete: function noRefCheck() { },
+                          },
+                        }}
+                      />
+                    </DivDetalhe>
+                    <DivDetalhe style={{ flex: 3 }}>
+                      <label>Ramos atividades</label>
+                      <Chip
+                        id="ramosAtividadesChip"
+                        className="ramosAtividadesChip"
+                        close={false}
+                        closeIcon={<Icon className="close">close</Icon>}
+                        options={{
+                          data:
+                            ramosAtividadesSelecionados !== undefined &&
+                            ramosAtividadesSelecionados,
+                          onChipAdd: this.handleManipulaRamosAtividades,
+                          onChipDelete: this.handleManipulaRamosAtividades,
+                          autocompleteOptions: {
+                            data: ramosAtividadesChips,
+                            limit: 5,
+                            minLength: 1,
+                            onAutocomplete: function noRefCheck() { },
+                          },
+                        }}
+                      />
+                    </DivDetalhe>
+                  </Linha>
+                  <Linha>
+                    <Button
+                      className="waves-effect waves-light saib-button is-primary"
+                      onClick={() => {
+                        this.setState({
+                          ramosAtividadesSelecionados: [],
+                          cidadesSelecionadas: [],
+                          vendedoresSelecionados: [],
+                        });
+                        setTimeout(() => {
+                          this.handleAllDataUpdate();
+                        }, 50);
+                      }}
+                    >
+                      Limpar
+                    </Button>
+                  </Linha>
+                </CollapsibleItem>
+              </Collapsible>
+            </Linha>
+            {directIndicators !== undefined && directIndicators.length > 0 ? (
+              <KpiIndicators
+                data={directIndicators}
+                loading={loading ? 1 : 0}
+              />
+            ) : (
+              <>
+                <Line style={{ alignItems: 'inherit' }}>
+                  <Graph style={{ padding: '20px' }}>
+                    <Skeleton count={1} height={50} />
+                    <Skeleton circle={true} height={200} width={200} />
+                  </Graph>
+                  <IndicatorsLine style={{ width: '100%' }} loading={1}>
+                    <Skeleton count={10} />
+                  </IndicatorsLine>
+                </Line>
+              </>
+            )}
+            <Linha
+              style={{ justifyContent: 'center' }}
+              className="salesByDateLine"
+            >
+              <DivDetalhe className="graphic" style={{ flex: 3 }}>
+                <ChartSalesByDate
+                  selectedFilter={selectedFilter}
+                  daySelected={daySelected}
+                  monthSelected={monthSelected}
+                  customSelectedInitial={customSelectedInitial}
+                  vendedoresSelecionados={vendedoresSelecionados}
+                  vendedores={vendedores}
+                  ramoAtividadeSelecionados={ramoAtividadeSelecionados}
+                  ramosAtividades={ramosAtividades}
+                  cidadesSelecionadas={cidadesSelecionadas}
+                  cidades={cidades}
+                  changedFilter={changedFilter}
+                  estruturaAutorizada={estruturaAutorizada}
+                  supervisoresSelecionados={supervisoresSelecionados}
+                  supervisores={supervisores}
+                  loading={loading}
+                />
+              </DivDetalhe>
+            </Linha>
+            <RoutesDashboard
+              selectedFilter={selectedFilter}
+              daySelected={daySelected}
+              monthSelected={monthSelected}
+              customSelectedInitial={customSelectedInitial}
+              vendedoresSelecionados={vendedoresSelecionados}
+              vendedores={vendedores}
+              ramoAtividadeSelecionados={ramoAtividadeSelecionados}
+              ramosAtividades={ramosAtividades}
+              cidadesSelecionadas={cidadesSelecionadas}
+              cidades={cidades}
+              changedFilter={changedFilter}
+              estruturaAutorizada={estruturaAutorizada}
+              supervisoresSelecionados={supervisoresSelecionados}
+              supervisores={supervisores}
+            />
+            <ProductDashboard
+              selectedFilter={selectedFilter}
+              daySelected={daySelected}
+              monthSelected={monthSelected}
+              customSelectedInitial={customSelectedInitial}
+              vendedoresSelecionados={vendedoresSelecionados}
+              vendedores={vendedores}
+              ramoAtividadeSelecionados={ramoAtividadeSelecionados}
+              ramosAtividades={ramosAtividades}
+              cidadesSelecionadas={cidadesSelecionadas}
+              cidades={cidades}
+              changedFilter={changedFilter}
+              estruturaAutorizada={estruturaAutorizada}
+              supervisoresSelecionados={supervisoresSelecionados}
+              supervisores={supervisores}
+            />
+          </SubContainer>
+        </Container>
+      </>
+    );
+  }
+}

@@ -1,0 +1,18 @@
+
+div.startSearch {
+	margin-left: 0px !important;
+}
+
+.startSearch div{
+  margin: 0px!important;
+}
+
+@media only screen and (max-width: 768px) {
+  .startSearch div{
+    margin: 0px!important;
+  }
+
+  .startSearch div div.campos{
+    margin: 0px!important;
+  }
+}

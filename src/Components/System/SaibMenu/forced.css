@@ -1,0 +1,15 @@
+div.botaoMenuItem > span{
+    font-size: 0.9rem;        
+}
+
+span.menuItemPai > div.botaoMenuItem > span {
+    font-weight: 700;
+}
+
+span.subMenuItemPai > div.botaoMenuItem > span {
+    font-weight: 700;
+}
+
+span.subMenuItemPai > div.botaoMenuItem {
+    margin-left: 2px;
+}

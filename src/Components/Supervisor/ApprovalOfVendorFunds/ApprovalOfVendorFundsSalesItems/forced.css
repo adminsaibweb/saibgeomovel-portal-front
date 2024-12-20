@@ -1,0 +1,27 @@
+table.deliveryItemsTable tr td {
+  padding: 5px !important;
+}
+
+.sendToSeparation {
+  width: 100% !important;
+  margin-top: 0px !important;
+  background-color: unset !important;
+  text-transform: unset !important;
+  font-size: 0.9rem !important;
+  text-transform: none !important;
+}
+.sendToSeparation:hover {
+  color: #7e3a9d !important;
+}
+
+.hidden {
+  display: none;
+}
+
+.boxFiltroSituacaoEntrega {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  justify-content: space-between;
+}

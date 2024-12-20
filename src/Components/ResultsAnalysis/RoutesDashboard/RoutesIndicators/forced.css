@@ -1,0 +1,17 @@
+.indicadorRotas .collapsible-header {
+  background-color: #8e44ad;
+  font-weight: 700;
+}
+
+.indicadorRotas .collapsible-body {
+  width: 100%;
+}
+
+.indicadorRotas{
+  margin-bottom: 0px!important;
+}
+
+.linhaIndicadores{
+  flex-direction: row!important;
+  justify-content: space-around!important;
+}

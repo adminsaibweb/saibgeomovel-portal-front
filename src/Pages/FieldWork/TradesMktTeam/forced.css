@@ -1,0 +1,25 @@
+.modal-confirm-delete {
+  width: 40%;
+}
+
+.modal.modal-confirm-delete .modal-footer {
+  display: flex;
+  justify-content: center !important;
+  border-top: 1px solid #8e44ad;
+}
+
+@media only screen and (max-width: 992px) {
+  .modal-confirm-delete {
+    width: 60%;
+  }
+}
+
+@media only screen and (max-width: 768px){
+  .modal-confirm-delete{
+    max-height: 100% !important;
+    margin: auto !important;
+    width: 100% !important;
+    height: 20% !important;
+    top: 20% !important;
+}
+}

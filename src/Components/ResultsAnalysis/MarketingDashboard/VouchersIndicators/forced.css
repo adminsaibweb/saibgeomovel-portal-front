@@ -1,0 +1,15 @@
+.offerBox {
+  border-left: 1px solid #ccc !important;
+  /* border-radius: 10px !important; */
+  padding: 8px !important;
+  margin: 5px;
+  /* box-shadow: -1px 1px 5px 1px rgba(0,0,0,0.1) */
+  /* width: 150px; */
+}
+
+.noOffer h6 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #858585;
+    text-align: center;    
+}

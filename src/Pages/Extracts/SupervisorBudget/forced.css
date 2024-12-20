@@ -1,0 +1,12 @@
+.boxFiltroTipoVerba{
+    flex-wrap: wrap!important;
+}
+
+.detalheSaibRadio{
+    padding: 10px 5px!important;
+}
+
+.titleFiltroTipoVerba{
+    font-weight: 700;
+    font-size: 1rem;
+}

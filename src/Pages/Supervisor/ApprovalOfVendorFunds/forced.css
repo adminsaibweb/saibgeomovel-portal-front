@@ -1,0 +1,29 @@
+/* estilização elementos react-css materialize */
+
+.chips {
+  margin-top: 7px;
+  border-bottom: 1px solid #ccc !important;
+  box-shadow: 0px 0px 0 0 #ccc !important;
+}
+
+.chips:focus {
+  box-shadow: 0px 0px 0 0 rgba(73, 70, 226, 0.46) !important;
+  border-bottom: 1px solid #ccc !important;
+}
+
+.valorSolicitado{
+  border: 3px solid #8870a4!important;
+  margin: 5px!important;
+  width: calc(100% - 20px)!important;
+  color: #8870a4;
+  font-weight: 900;
+  font-size: 1.6rem!important;
+  padding-left: 10px!important;
+  height: 30px!important;
+  /* background-color: #61098a!important; */
+  border-radius: 4px!important;
+}
+
+tr > .valorSolicitado{
+  background: radial-gradient(circle, rgba(191,31,124,1) 0%, rgba(97,9,138,1) 100%)!important;
+}

@@ -1,0 +1,72 @@
+.directTituloJanela {
+  background-color: #bd207b;
+  color: white;
+  margin-top: 0px;
+  /* padding-left: 64px; */
+  padding-right: 10px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  height: 50px;
+  min-height: 50px;
+}
+.divTitulo {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 12px;
+}
+.iconeVoltar {
+  color: white;
+  padding-left: 10px;
+}
+.iconeNovo {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-bottom: 3px;
+  color: white;
+  display: flex !important;
+  align-items: center;
+}
+.divDireita {
+  padding-left: 20px;
+  padding-right: 5px;
+}
+.h5Titulo {
+  flex-grow: 5;
+  display: flex;
+  align-items: center;
+  margin: -1px 0px;
+}
+.h5Titulo i {
+  padding-right: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+@media (max-width: 575px) {
+  .h5Titulo {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: -1px;
+  }
+}
+
+@media (max-width: 768px) {
+  .directTituloJanela {
+    /* margin-top: 50px; */
+    /* min-width: 100%; */
+    /* padding-left: 0px; */
+
+    margin-top: 40px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin-left: unset;
+    padding-left: unset;
+    padding-top: 5px;
+  }
+}

@@ -1,0 +1,27 @@
+.minusAlert,
+.plusAlert {
+  color: #fff;
+}
+
+.collapsible li.collapsibleItemAlerts.active .collapsible-header .plusAlert {
+  display: none!important;
+  transition: 1.5s;
+}
+  .collapsible li.active .collapsible-header, .collapsible li .collapsible-header .plusAlert {
+  display: block!important;
+  transition: 1.5s;
+  display: flex!important;
+}
+
+.collapsible li.collapsibleItemAlerts.active .collapsible-header .plusAlert,
+.collapsible li.collapsibleItemAlerts .collapsible-header .minusAlert {
+  display: none;
+  transition: 1.5s;
+}
+
+.collapsible li.collapsibleItemAlerts.active .collapsible-header .minusAlert {
+  display: block;
+  transition: 1.5s;
+}
+
+

@@ -1,0 +1,117 @@
+div.startWorkDayContainer {
+	margin-left: 0px !important;
+}
+
+.trTradeTableStartWorkDay .tdIconeStartWorkDay {
+	padding-left: 5px !important;
+  display: flex;
+  flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+/* .trTradeTable .tdIcone button {
+	width: unset !important;
+} */
+
+.tableStartWorkDay .trTradeTable td {
+	padding-left: 10px !important;
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+}
+
+
+.linhaStartWorkDay{
+  flex-direction: row!important;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ccc;
+  align-items: center!important;
+  width: 100%;
+  min-height: 140px;
+}
+
+.linhaStartWorkDay div button.is-circle{
+  padding: 20px!important;
+}
+
+.linhaStartWorkDay .linhaStartWorkDayInterna {
+  min-width: 100%;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-bottom: 5px;
+  padding-left: 0px;
+  padding-right: 0px;
+  justify-content: center;
+  }
+
+.linhaStartWorkDay .linhaStartWorkDayInterna  button {
+  /* width: 140px; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.linhaStartWorkDay:last-child {
+  margin-bottom: 100px;
+}
+
+
+.modal-footer{
+  display: flex;
+  justify-content: flex-end!important;
+}
+
+
+.footerStartWorkDay{
+  justify-content: space-between!important;
+}
+
+.footerStartWorkDay div{
+  width: unset!important;
+}
+
+.topStartWorkDay{
+  justify-content: space-between!important;
+  flex-direction: row!important;
+  flex-wrap: auto;
+}
+
+.topStartWorkDay div{
+  /* display: flex!important; */
+  flex-direction: row!important;
+  justify-content: center!important;
+}
+
+.topStartWorkDay div button{
+  width: unset!important;
+}
+
+.alertaAtendimentos{
+  width: 100%!important;
+}
+
+.divAlertaAtendimentos{
+  width: 100%!important;
+
+}
+
+.divModal {
+  margin-top: 10px;
+}
+
+.divModal .pModal{
+  margin-top: 10px!important;
+  font-size: 2rem!important;
+  font-weight: 700;
+}
+
+.divModal .spanModal{
+  font-weight: 500;
+  font-size: 1.5rem!important;
+  color: #858585;
+}
+
+
+.divModal .spanModal.bold{
+  font-weight: 900!important;
+}

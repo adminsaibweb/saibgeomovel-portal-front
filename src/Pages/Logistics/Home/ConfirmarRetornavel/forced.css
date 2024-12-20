@@ -1,0 +1,9 @@
+div.confirmarRetornavel ul.collapsible li .collapsible-header {
+    background-color: #fafafa!important;
+    border-bottom: 1px solid #cccccc!important;
+    height: 38px!important;    
+}
+
+div.confirmarRetornavel ul.collapsible li .collapsible-body {
+    border-width: 0px 0px 1px 0px;
+}

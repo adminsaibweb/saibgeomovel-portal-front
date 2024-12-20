@@ -1,0 +1,38 @@
+.iconOrderDirect {
+  border: none !important;
+
+  > svg {
+    border-color: none !important;
+    border-style: none !important;
+    border-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+}
+
+.collapsibleEditOrderDirect .collapsible {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.collapsible li.collapsibleEditOrderDirectItem.active .collapsible-header .plus {
+  display: none !important;
+  transition: 1.5s;
+}
+
+.collapsible li.active .collapsible-header .minus,
+.collapsible li .collapsible-header .plus {
+  display: block !important;
+  transition: 1.5s;
+}
+
+.collapsible li.collapsibleEditOrderDirectItem.active .collapsible-header .plus,
+.collapsible li.collapsibleEditOrderDirectItem .collapsible-header .minus {
+  display: none;
+  transition: 1.5s;
+}
+
+.collapsible li.collapsibleEditOrderDirectItem.active .collapsible-header .minus {
+  display: block;
+  transition: 1.5s;
+}

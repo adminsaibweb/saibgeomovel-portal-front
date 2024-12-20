@@ -1,0 +1,67 @@
+.hg-theme-default .hg-row .hg-button-container,
+.hg-theme-default .hg-row .hg-button:last-child {
+	margin-right: unset !important;
+}
+
+.hg-theme-default .hg-button.hg-standardBtn,
+.hg-button.hg-functionBtn.hg-button-bksp {
+	margin: 2px !important;
+}
+
+.spanIntegerNumber {
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid #9e9e9e;
+	border-radius: 0;
+	outline: none;
+	height: 3rem;
+	width: 100%;
+	font-size: 16px;
+	margin: 0 0 8px 0;
+	padding: 0;
+	box-shadow: none;
+	box-sizing: content-box;
+	transition: box-shadow .3s, border .3s;
+}
+
+.react-simple-keyboard {
+	position: fixed!important;
+	left: 0px!important;
+	top: calc(100% - 211px)!important;
+}
+
+.legendaValor{
+  padding: 0px!important;
+  position: relative;
+  margin-top: -20px!important;
+}
+
+.botaoNps{
+  padding: 6px!important;
+  width: unset!important;
+  cursor: pointer!important;
+}
+
+.is-call-to-action.botaoNps{
+  max-width: 20px!important;
+  width: unset!important;
+}
+
+.spanNps{
+  color: #858585!important;
+  font-weight: 700!important;
+  font-size: 1.2rem!important
+}
+
+.botaoNpsSelected .spanNps{
+  color: #fff!important;
+}
+
+.linhaNps{
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 10px;
+  background-color: #cccccc1a;
+  border-top: 1px solid #ccc;
+  margin-top: 20px!important;
+}

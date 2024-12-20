@@ -1,0 +1,29 @@
+.loadingSpiner{
+  margin: auto!important;
+  color: red;
+}
+
+.startSearchGrouped div{
+  margin: unset!important;
+}
+
+.circle-clipper{
+  border-top-color: #fff!important;
+  border-right-color: #fff!important;
+  border-bottom-color: #fff!important;
+  border-left-color: #fff!important;
+}
+
+.progress{
+  background-color: white!important;
+  height: 10px!important;
+}
+
+.determinate{
+  background-color: #8e44ad!important;
+}
+
+.loading .loadingInnerDiv{
+  margin-top: auto!important;
+  margin-bottom: auto!important;
+}

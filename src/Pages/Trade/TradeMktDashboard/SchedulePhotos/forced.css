@@ -1,0 +1,39 @@
+.professionalScheduleTitle {
+  width: 100%;
+  margin-top: 0px;
+}
+
+.professionalScheduleContainer {
+  width: calc(100% - 69px);
+}
+
+@media only screen and (max-width: 768px) {
+  .professionalScheduleContainer {
+    width: calc(100% - 5px);
+  }
+}
+
+.botoesComando {
+  flex-direction: row;
+  color: white;
+  justify-content: space-between;
+  max-width: 500px;
+  align-items: center;
+  min-height: 100px;
+}
+
+.minus1,
+.plus1 {
+  color: white;
+}
+
+.collapsible li.active .collapsible-header .minus1,
+.collapsible li .collapsible-header .plus1 {
+  display: none;
+  transition: 1.5s;
+}
+
+.collapsible li.active .collapsible-header .plus1 {
+  display: block;
+  transition: 1.5s;
+}

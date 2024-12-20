@@ -1,0 +1,25 @@
+
+.minus,
+.plus {
+  color: white;
+}
+.collapsible li.collapsibleQuestionManagerItem.active .collapsible-header .plus {
+  display: none!important;
+  transition: 1.5s;
+}
+  .collapsible li.active .collapsible-header .minus, .collapsible li .collapsible-header .plus {
+  display: block!important;
+  transition: 1.5s;
+}
+
+.collapsible li.collapsibleQuestionManagerItem.active .collapsible-header .plus,
+.collapsible li.collapsibleQuestionManagerItem .collapsible-header .minus {
+  display: none;
+  transition: 1.5s;
+}
+
+.collapsible li.collapsibleQuestionManagerItem.active .collapsible-header .minus {
+  display: block;
+  transition: 1.5s;
+}
+

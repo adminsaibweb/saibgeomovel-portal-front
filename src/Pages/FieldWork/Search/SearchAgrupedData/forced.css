@@ -1,0 +1,18 @@
+  .modal-footer button {
+      background-color: #bd207b !important;
+      border-color: #bd207b !important;
+
+  }
+  .modal-footer :hover {
+    background-color: #d91487 !important;
+    border-color: #d91487 !important;
+  }
+
+  .waves-effect waves-light saib-button.is-primary:disabled {
+    border-color: #cccccc !important;
+  }
+
+  .modal-content  h4{
+     color: #bd207b !important;
+
+  }

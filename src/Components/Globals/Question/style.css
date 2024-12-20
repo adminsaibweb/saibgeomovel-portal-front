@@ -1,0 +1,47 @@
+.modalQuestion{
+  top: 0 !important;
+  height: 100%!important;
+}
+.modal-content h4 {
+	font-size: 1rem;
+	font-weight: 700;
+	text-align: center;
+	color: #858585;
+}
+
+.modal-content p{
+  font-size: 1.5rem;
+}
+
+.modal-content h4 {
+  color: #bf1f7c!important;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  text-align: center;
+}
+
+
+@media only screen and (max-width: 768px) {
+  .modal-content h4 {
+  }
+}
+
+@media only screen and (max-width: 768px) {
+	.modal {
+		max-height: 100% !important;
+		margin: 0px !important;
+		width: 100% !important;
+		height: 100% !important;
+		top: 0px !important;
+	}
+}
+
+.modal-content {
+	padding: 10px !important;
+}
+
+.modal-footer{
+  border-top: 1px solid #ccc;
+}

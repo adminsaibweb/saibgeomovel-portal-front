@@ -1,0 +1,9 @@
+.modal.modal-documents {
+  max-height: 85% !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .modal.modal-documents {
+    max-height: 100% !important;
+  }
+}

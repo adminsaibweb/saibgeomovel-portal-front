@@ -1,0 +1,29 @@
+.collapsible{
+  margin-top: 4px;    
+  box-shadow: -1px 1px 5px 1px rgba(0,0,0,0.1)!important;
+  padding: 5px!important;
+}
+
+.collapsible-header{
+  padding: 5px 5px;
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: white;
+  background-color: #bf1f7c;  
+}
+
+.collapsible-body{
+  padding: 0px 0px;
+  border-bottom: unset;
+  margin-top: 8px;
+}
+
+
+td{
+  padding: 0px!important;
+}
+
+/* 
+.chip .close{
+  display: none;
+} */

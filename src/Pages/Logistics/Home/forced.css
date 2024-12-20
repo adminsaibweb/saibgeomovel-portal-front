@@ -1,0 +1,188 @@
+@media only screen and (max-width: 768px) {
+  .leftPanel > div {
+    box-shadow: unset !important;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .ultimoBotaoAtendimento{
+    padding: 5px 5px !important;
+  }
+}
+
+.minus,
+.plus {
+  color: #bf1f7c;
+}
+
+.expandable li.active .collapsible-header .plus,
+.expandable li .collapsible-header .minus {
+  display: none;
+  transition: 1.5s;
+}
+
+.expandable li.active .collapsible-header .minus {
+  display: block;
+  transition: 1.5s;
+}
+
+.is-primary-local {
+  background: #8e44ad !important;
+  border: 1px solid #8e44ad !important;
+  border-radius: 100px !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  font-family: 'Roboto' !important;
+  font-size: 1rem !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: normal !important;
+  /* padding: 0px !important; */
+  text-align: center !important;
+
+  width: auto !important;
+  text-transform: none !important;
+  margin: 0px !important;
+  height: auto !important;
+}
+
+.is-call-to-action-local {
+  background: #bf1f7c !important;
+  border: 1px solid #bf1f7c !important;
+  border-radius: 100px !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  font-family: 'Roboto' !important;
+  font-size: 1rem !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: normal !important;
+  /* padding: 0px !important; */
+  text-align: center !important;
+
+  width: auto !important;
+  text-transform: none !important;
+  margin: 0px !important;
+  height: auto !important;
+}
+
+.roundNumber {
+  margin-top: 2px;
+  margin-left: 2px;
+  padding: 5px 12px 5px 12px;
+  font-size: 1rem;
+  font-weight: 900;
+  background-color: #8e44ad;
+  color: white;
+  border-radius: 100px;
+  height: 30px;
+}
+
+
+/* .expandable li.active .collapsible-header,
+.expandable li .collapsible-header{
+  padding-left: 10px !important;
+}
+ */
+
+div > .filtroEntregas{
+  margin-bottom: 10px!important;
+}
+
+.filtroEntregas li .collapsible-header{
+  padding-left: 0px!important;
+}
+
+
+.filtroEntregas li.active .collapsible-header{
+  padding-left: 0px!important;
+}
+
+
+.filtroEntregas li.active .collapsible-body{
+  padding-left: 0px!important;
+  border-width: 0px!important;
+}
+
+.filtroEntregas li .collapsible-body{
+  padding-left: 0px!important;
+  border-width: 0px!important;
+  margin-top: 35px!important;
+}
+
+.linhaFiltroEntregas{
+  position: relative!important;
+  top: -55px!important;
+}
+
+.filtroEntregas .collapsible-header{
+  background-color: transparent!important;
+  color: white!important;
+  width: 24px!important;
+  margin-left: 12px!important;
+  border-radius: 14px!important;
+  margin-top: 10px!important;
+  padding: 0px 0px 0px 1px !important;
+
+}
+
+.modal-footer{
+  display: flex;
+  justify-content: flex-end;;
+}
+
+.modal-footer .btn.waves-effect waves-light saib-button.is-primary.modal-close{
+  text-transform: none!important;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.extratoProdutos{
+  border-width: 1px!important;
+  padding-left: 0px!important;
+  background-color: transparent!important;
+  text-transform: capitalize!important;
+}
+
+
+.extratoProdutos.expandable li.active .collapsible-header,
+.extratoProdutos.expandable li .collapsible-header{
+  border-width: 1px!important;
+  padding-left: 0px!important;
+  background-color: transparent!important;
+  text-transform: capitalize!important;
+}
+
+.maisDetalhes.expandable li.active .collapsible-header,
+.maisDetalhes.expandable li .collapsible-header{
+  border-width: 1px!important;
+  padding-left: 0px!important;
+  background-color: #bf1f7c!important;
+  text-transform: capitalize!important;
+}
+
+.entregas.expandable li.active .collapsible-header,
+.entregas.expandable li .collapsible-header{
+  border-width: 1px!important;
+  padding-left: 0px!important;
+  background-color: transparent!important;
+  text-transform: capitalize!important;
+}
+
+.entregas{
+  padding: 0px 0px 10px 0px!important;
+}
+
+.entregas:hover{
+  background-color: #cccccc1a;
+}
+
+.acertoRotaPedidosEntregues.expandable li.active .collapsible-header,
+.acertoRotaPedidosEntregues.expandable li .collapsible-header{
+  border-width: 1px!important;
+  padding-left: 0px!important;
+  background-color: transparent!important;
+  text-transform: capitalize!important;
+}

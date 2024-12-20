@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base href="/" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="%PUBLIC_URL%/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="%PUBLIC_URL%/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="%PUBLIC_URL%/favicon/site.webmanifest" />
+    <link
+      rel="mask-icon"
+      href="%PUBLIC_URL%/favicon/safari-pinned-tab.svg"
+      color="#5bbad5"
+    />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta name="msapplication-TileColor" content="#9f00a7" />
+    <meta
+      name="msapplication-config"
+      content="%PUBLIC_URL%/favicon/browserconfig.xml"
+    />
+    <meta name="theme-color" content="#8e44ad" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="%PUBLIC_URL%/favicon/apple/apple-touch-icon.png"
+    />
+    <link
+      href="%PUBLIC_URL%/favicon/apple/iphone5_splash.png"
+      media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="%PUBLIC_URL%/favicon/apple/iphone6_splash.png"
+      media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="%PUBLIC_URL%/favicon/apple/iphoneplus_splash.png"
+      media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="%PUBLIC_URL%/favicon/apple/iphonex_splash.png"
+      media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="%PUBLIC_URL%/favicon/apple/iphonexr_splash.png"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="%PUBLIC_URL%/favicon/apple/iphonexsmax_splash.png"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="%PUBLIC_URL%/favicon/apple/ipad_splash.png"
+      media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="%PUBLIC_URL%/favicon/apple/ipadpro1_splash.png"
+      media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="%PUBLIC_URL%/favicon/apple/ipadpro3_splash.png"
+      media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="%PUBLIC_URL%/favicon/apple/ipadpro2_splash.png"
+      media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="%PUBLIC_URL%/styles/materialize.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="%PUBLIC_URL%/styles/globals.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdN4niRiYdhPBIxEny9lGB-OpBJ0NPpnY&v=3.exp&libraries=geometry,drawing,places"
+      async
+    ></script>
+    <script src="DragDropTouch.js"></script>
+    <meta name="saibGeoMovel" content="Saib GEOMóvel" />
+    <title>Saib GEOMóvel</title>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module">
+      let interval = null;
+
+      document.addEventListener("visibilitychange", async () => {
+        const state = document.visibilityState;
+
+        if (state === "hidden" && checksURL(document.URL)) {
+          if ("geolocation" in navigator) {
+            getGeolocation();
+          }
+        }
+
+        if (state === "visible") {
+          clearInterval(interval);
+        }
+      });
+
+      function getGeolocation() {
+        let data = null;
+        interval = setInterval(async () => {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            data = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              synced: 0,
+              dateTime: new Date(),
+            };
+
+            if (data && data.latitude) {
+              insertIntoDatabase(data);
+            }
+          });
+        }, 60000);
+      }
+
+      function insertIntoDatabase(dataObject) {
+        var indexedDBOpenRequest = window.indexedDB.open("gpsDB", 1);
+        indexedDBOpenRequest.onupgradeneeded = function (event) {
+          var database = event.target.result;
+          var objectStore = database.createObjectStore("gps", {
+            autoIncrement: true,
+            keyPath: "id",
+          });
+          objectStore.createIndex("latitude", "latitude", { unique: false });
+          objectStore.createIndex("longitude", "longitude", { unique: false });
+          objectStore.createIndex("dateTime", "dateTime", { unique: false });
+          objectStore.createIndex("synced", "synced", { unique: false });
+        };
+
+        indexedDBOpenRequest.onsuccess = function () {
+          let db = this.result;
+          let transaction = db.transaction("gps", "readwrite");
+          let storeObj = transaction.objectStore("gps");
+          storeObj.add(dataObject);
+        };
+
+        indexedDBOpenRequest.onerror = function (error) {
+          console.error("IndexedDB error:", error);
+        };
+      }
+
+      function checksURL(url) {
+        const routes = [
+          "https://movel.saibweb.com.br/Home",
+          "https://movel.saibweb.com.br/StartWorkDay",
+          "https://movel.saibweb.com.br/StartSearchGrouped",
+          "https://movel.saibweb.com.br/StartSearch",
+        ];
+
+        if (routes.find((element) => element === url)) {
+          return true;
+        }
+        return false;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <base href="/">
+  <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon/favicon-16x16.png">
+  <link rel="mask-icon" href="%PUBLIC_URL%/favicon/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <meta name="msapplication-TileColor" content="#9f00a7">
+  <meta name="msapplication-config" content="%PUBLIC_URL%/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/favicon/apple/apple-touch-icon.png">
+  <link href="%PUBLIC_URL%/favicon/apple/iphone5_splash.png"
+    media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+  <link href="%PUBLIC_URL%/favicon/apple/iphone6_splash.png"
+    media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+  <link href="%PUBLIC_URL%/favicon/apple/iphoneplus_splash.png"
+    media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
+    rel="apple-touch-startup-image" />
+  <link href="%PUBLIC_URL%/favicon/apple/iphonex_splash.png"
+    media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+    rel="apple-touch-startup-image" />
+  <link href="%PUBLIC_URL%/favicon/apple/iphonexr_splash.png"
+    media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+  <link href="%PUBLIC_URL%/favicon/apple/iphonexsmax_splash.png"
+    media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
+    rel="apple-touch-startup-image" />
+  <link href="%PUBLIC_URL%/favicon/apple/ipad_splash.png"
+    media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+  <link href="%PUBLIC_URL%/favicon/apple/ipadpro1_splash.png"
+    media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+  <link href="%PUBLIC_URL%/favicon/apple/ipadpro3_splash.png"
+    media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+  <link href="%PUBLIC_URL%/favicon/apple/ipadpro2_splash.png"
+    media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+
+  <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/styles/materialize.min.css">
+  <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/styles/globals.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta name="saibGeoMovel" content="Saib GEOMóvel" />
+  <title>Saib GEOMóvel</title>
+
+  <script type="text/javascript">
+    let mapCoordinates = ''
+    if (checksURL(document.URL)) {
+      getGeolocation()
+    }
+    function getGeolocation() {
+      setInterval(() => {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          data = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            synced: 0,
+            dateTime: new Date()
+          }
+
+
+          if (data && data.latitude) {
+            insertIntoDatabase(data)
+          }
+        });
+
+      }, 60000)
+    }
+
+    function insertIntoDatabase(dataObject) {
+      var indexedDBOpenRequest = window.indexedDB.open('gpsDB', 1)
+      indexedDBOpenRequest.onupgradeneeded = function (event) {
+        var database = event.target.result;
+        var objectStore = database.createObjectStore('gps', {
+          autoIncrement: true,
+          keyPath: 'id',
+        });
+        objectStore.createIndex('latitude', 'latitude', { unique: false });
+        objectStore.createIndex('longitude', 'longitude', { unique: false });
+        objectStore.createIndex('dateTime', 'dateTime', { unique: false });
+        objectStore.createIndex('synced', 'synced', { unique: false });
+      }
+
+      indexedDBOpenRequest.onsuccess = function () {
+        let db = this.result
+        let transaction = db.transaction("gps", "readwrite");
+        let storeObj = transaction.objectStore("gps");
+        storeObj.add(dataObject);
+      }
+
+      indexedDBOpenRequest.onerror = function (error) {
+        console.error('IndexedDB error:', error)
+      }
+    }
+
+    function checksURL(url) {
+      const routes = [
+        "https://movel.saibweb.com.br/Home",
+        "https://movel.saibweb.com.br/StartWorkDay",
+        "https://movel.saibweb.com.br/StartSearchGrouped",
+        "https://movel.saibweb.com.br/StartSearch"
+      ];
+
+      if (routes.find(element => element === url)) {
+        return true;
+      }
+      return false;
+    }
+
+  </script>
+</head>
+
+
+<body style="
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      width: 100%;
+    ">
+  <div class="container" style="
+        background-color: #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-height: 30%;
+        margin-top: 20px;
+      ">
+    <h4 class="city-name" style="display: flex; text-align: center;align-items: center;">
+      Sem conexão com a internet
+    </h4>
+
+    <a style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: rebeccapurple;
+          border-radius: 10px;
+          padding: 10px;
+          color: white;
+          font-weight: 700;
+        " onClick="javascript: window.location.href = '/home';">Voltar</a>
+  </div>
+
+</body>
+
+</html>

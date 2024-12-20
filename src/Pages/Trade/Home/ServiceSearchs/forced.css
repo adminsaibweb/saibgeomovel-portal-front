@@ -1,0 +1,52 @@
+.linhaAtendimento{
+  flex-direction: row!important;
+  align-items: center!important;
+  border-bottom: 1px solid #ccc;
+  flex-wrap: nowrap!important;
+  margin-bottom: 10px!important;
+}
+
+.linhaAtendimento:last-child{
+  margin-bottom: 50px!important;
+  border-bottom: 0px!important;
+  /* background-color: red; */
+}
+
+.linhaAtendimento div{
+  padding-top: unset!important;
+  /* min-width: 300px!important; */
+}
+
+.linhaAtendimento .botaoAction{
+  min-width: 68px!important;
+
+}
+
+.attendanceSearchs{
+  margin-left: 0px!important;
+}
+
+.descricaoPesquisa{
+  white-space: nowrap!important;
+  overflow: hidden!important;
+  text-overflow: ellipsis!important;
+  word-break: break-all!important;
+}
+
+.tituloCliente{
+  margin-top: 50px!important;
+}
+
+.progressoPesquisas{
+  border: 1px solid #8e44ad!important;
+  /* margin-bottom: 2px!important;
+  margin-top: 2px!important; */
+}
+.totalConcluido{
+  justify-content: center;
+  display: flex;
+}
+
+.progress.lighten-5.progressoPesquisas .progressoPesquisas{
+  display: inline!important;
+}

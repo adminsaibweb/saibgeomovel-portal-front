@@ -1,0 +1,28 @@
+div.confirmarAcerto ul.collapsible li .collapsible-header {
+    background-color: #fafafa!important;
+    border-bottom: 1px solid #cccccc!important;
+    height: 38px!important;
+}
+
+div.confirmarAcerto ul.collapsible li .collapsible-body {
+    border-width: 0px 0px 1px 0px;
+}
+
+.formaPagamento{
+    display: flex!important;
+}
+
+.adicionarAcerto .material-icons{
+    color: white!important;
+    font-size: unset!important;
+}
+
+.removerAcerto .material-icons{
+    color: white!important;
+    font-size: unset!important;
+}
+
+.waves-effect waves-light saib-button.adicionarAcerto + .waves-effect waves-light saib-button{
+    margin-left: 0px!important;
+}
+

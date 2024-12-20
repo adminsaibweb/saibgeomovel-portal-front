@@ -1,0 +1,21 @@
+div.confirmarFinalizar ul.collapsible li .collapsible-header {
+    background-color: #fafafa!important;
+    border-bottom: 1px solid #cccccc!important;
+    height: 38px!important;    
+}
+
+div.confirmarFinalizar ul.collapsible li .collapsible-body {
+    border-width: 0px 0px 1px 0px;
+}
+
+.confirmarNaoEntrega, .cancelarNaoEntrega{
+    display: flex!important;
+    flex-direction: row!important;
+    justify-content: center!important;
+    align-items: center!important;
+}
+
+.confirmarNaoEntrega > i, .cancelarNaoEntrega > i{
+    color: white!important;
+    margin-right: 2px!important;
+} 

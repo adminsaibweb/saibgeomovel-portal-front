@@ -1,0 +1,222 @@
+/* estilização elementos react-css materialize */
+.colapsibleClientesItem .minus,
+.colapsibleClientesItem .plus {
+	color: #fff;
+}
+
+.colapsibleClientes.collapsible li.colapsibleClientesItem.active .collapsible-header .plus,
+.colapsibleClientes.collapsible li.colapsibleClientesItem .collapsible-header .minus {
+	display: none!important;
+	transition: 1.5s!important;
+}
+
+.colapsibleClientes.collapsible li.colapsibleClientesItem.active .collapsible-header .minus {
+	display: block!important;
+	transition: 1.5s!important;
+}
+
+.colapsibleVendasItem .menos,
+.colapsibleVendasItem .mais {
+	color: #8e44ad;
+}
+
+.colapsibleVendas.collapsible li.colapsibleVendasItem.active .collapsible-header .mais,
+.colapsibleVendas.collapsible li.colapsibleVendasItem .collapsible-header .menos {
+	display: none;
+	transition: 1.5s;
+}
+
+.colapsibleVendas.collapsible li.colapsibleVendasItem.active .collapsible-header .menos {
+	display: block;
+	transition: 1.5s;
+}
+
+.colapsibleRotas.collapsible,
+.colapsibleVendasItem.collapsible,
+.colapsibleVendas.collapsible {
+	/* min-width: 320px; */
+	max-width: 320px;
+}
+
+@media only screen and (max-width: 768px) {
+	.preLinhaColapsibleClientes {
+		width: 100%;
+	}
+}
+
+.colapsibleClientes {
+	margin-top: 0px;
+	box-shadow: unset !important;
+	padding: 0px !important;
+	border: 0px !important;
+	width: 100%;
+	min-width: 100%;
+}
+
+.colapsibleClientesItem .collapsible-header {
+	background-color: #8e44ad;
+}
+
+.colapsibleClientesItem .collapsible-header {
+	background-color: #8e44ad;
+	padding: 2px 2px;
+	font-weight: 600;
+}
+
+.colapsibleVendas {
+	margin-bottom: 1px !important;
+	width: 100%;
+	min-width: 100%;
+}
+
+.colapsibleVendas {
+	margin-top: 0px;
+	box-shadow: unset !important;
+	padding: 0px !important;
+	border: 0px !important;
+}
+
+.colapsibleVendasItem .collapsible-header {
+	background-color: #8e44ad;
+}
+
+.colapsibleVendasItem .collapsible-body {
+	width: 100%;
+	min-width: 100% !important;
+}
+
+.colapsibleClientesItem .collapsible-body {
+	width: 100%;
+	min-width: 100% !important;
+}
+
+.colapsibleClientesItem .collapsible-body .linhaPedido {
+	width: 100%;
+	min-width: 100% !important;
+	border: 1px solid #ccc;
+	padding: 1px;
+	border-radius: 10px;
+}
+
+.colapsibleVendasItem .collapsible-header {
+	background-color: white;
+	padding: 2px 2px;
+	font-weight: 700;
+	color: #8e44ad;
+	border: 0px !important;
+}
+
+.colapsibleVendas {
+	margin-bottom: 1px !important;
+}
+
+.colapsible-header {
+	padding: 0px 3px !important;
+	/* border-bottom-width: 0px!important; */
+}
+
+/* thead {
+  line-height: 0.4rem !important;
+} */
+
+.collapsible-body div {
+	margin-top: 0px;
+}
+
+.detalheLinhaPedido button i {
+	color: white !important;
+}
+
+.detalheLinhaPedido button {
+	padding: 0px 5px;
+}
+
+.linhaPedido {
+	margin-bottom: 5px;
+	align-items: stretch;
+	justify-content: space-between !important;
+}
+
+.linhaCliente {
+	margin-bottom: 5px;
+	align-items: stretch;
+	justify-content: space-between !important;
+}
+
+.detalheLinhaPedido {
+	flex-direction: row !important;
+}
+
+.detalheLinhaPedido label {
+	margin-right: 10px;
+}
+
+.segundaColunaCliente {
+	min-width: 105px;
+}
+
+.primeiraColunaCliente {
+	min-width: 80px;
+}
+
+.segundaColunaPedido {
+	min-width: 86px;
+	text-align: left;
+}
+
+.segundaColunaValorPedido {
+	min-width: 36px;
+	text-align: right;
+}
+
+.primeiraColunaPedido {
+	min-width: 80px;
+}
+
+.is-primary-local {
+	background: #8e44ad !important;
+	border: 1px solid #8e44ad !important;
+	border-radius: 100px !important;
+	color: #ffffff !important;
+	cursor: pointer !important;
+	display: flex !important;
+	font-family: 'Roboto' !important;
+	font-size: 1rem !important;
+	font-style: normal !important;
+	font-weight: 500 !important;
+	line-height: normal !important;
+	text-align: center !important;
+	width: auto !important;
+	text-transform: none !important;
+	margin: 0px !important;
+	height: auto !important;
+	display: flex;
+	align-items: center;
+	padding: 6px 11px !important;
+	position: relative;
+	top: -2px;
+}
+
+.collapsiblePedidos {
+	min-width: 100%;
+}
+
+.collapsiblePedidosItens {
+	min-width: 100%;
+}
+
+.modal-content p {
+	font-size: 1.0rem !important;
+}
+
+@media only screen and (min-width: 992px) {
+	html {
+		font-size: 14px !important;
+	}
+}
+
+
+.headerVendasHoje div{
+  display: flex!important;
+  justify-content: center!important;
+}

@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/css/main.730a211a.chunk.css",
+    "main.js": "/static/js/main.de2ad2dd.chunk.js",
+    "main.js.map": "/static/js/main.de2ad2dd.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.929cd0af.js",
+    "runtime-main.js.map": "/static/js/runtime-main.929cd0af.js.map",
+    "static/css/2.6693e447.chunk.css": "/static/css/2.6693e447.chunk.css",
+    "static/js/2.4c304584.chunk.js": "/static/js/2.4c304584.chunk.js",
+    "static/js/2.4c304584.chunk.js.map": "/static/js/2.4c304584.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.8755946a36adcee0a7f34df9d4e9ead9.js": "/precache-manifest.8755946a36adcee0a7f34df9d4e9ead9.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.6693e447.chunk.css.map": "/static/css/2.6693e447.chunk.css.map",
+    "static/css/main.730a211a.chunk.css.map": "/static/css/main.730a211a.chunk.css.map",
+    "static/js/2.4c304584.chunk.js.LICENSE.txt": "/static/js/2.4c304584.chunk.js.LICENSE.txt",
+    "static/media/disappointedsaleswoman.gif": "/static/media/disappointedsaleswoman.35b554b7.gif",
+    "static/media/saibGeoLogoLogin.png": "/static/media/saibGeoLogoLogin.a75b816a.png",
+    "static/media/saibweb.png": "/static/media/saibweb.ae9193a5.png",
+    "static/media/store-scanner-beep-90395.mp3": "/static/media/store-scanner-beep-90395.e43e76d7.mp3"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.929cd0af.js",
+    "static/css/2.6693e447.chunk.css",
+    "static/js/2.4c304584.chunk.js",
+    "static/css/main.730a211a.chunk.css",
+    "static/js/main.de2ad2dd.chunk.js"
+  ]
+}
