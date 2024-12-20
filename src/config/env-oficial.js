@@ -16,13 +16,13 @@ export class EnviromentVars {
   static urlImagens = 'https://imgweb.saibweb.com.br/movel/tradeMkt/imagens/';
 
   /* Back-end */
-  static urlSaibGeoMovelBack = 'https://movel.saibweb.com.br/api';
+  static urlSaibGeoMovelBack = 'https://portal.movel.saibweb.com.br/api';
 
   // /* Back-end */
   // static urlSaibGeoMovelBack = 'https://10.10.10.3:3019';
 
   /* Front-end */
-  static urlSaibGeoMovelFront = 'https://movel.saibweb.com.br';
+  static urlSaibGeoMovelFront = 'https://portal.movel.saibweb.com.br';
 }
 
 
